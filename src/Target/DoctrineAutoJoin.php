@@ -44,6 +44,13 @@ class DoctrineAutoJoin
             /** @var \Doctrine\ORM\Query\Expr\Join $join */
             foreach ($joins as $join) {
                 list($fromAlias, $attribute) = explode('.', $join->getJoin());
+
+                if ($attribute === null)
+                {
+                    $this->saveAlias($join->getJoin(), (string) $join, $join->getAlias(), $fromAlias);
+                    continue;
+                }
+
                 $relation = $this->getRelation($attribute, $this->getEntity($fromAlias));
 
                 $this->saveAlias($relation['targetEntity'], $relation['fieldName'], $join->getAlias(), $fromAlias);
